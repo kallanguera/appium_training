@@ -1,4 +1,4 @@
-package org.example;
+package org.appiumtraining;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 

@@ -7,7 +7,7 @@ This project consists in a basic structure that is used for training and getting
 - Appium
 - Maven
 - Xcode (iOS simulator)
-- AndroidStudio (avd emulatorß)
+- AndroidStudio (avd emulator)
 
 ### Launch Android Emulator automatically
 

@@ -6,6 +6,8 @@ This project consists in a basic structure that is used for training and getting
 - Java 21
 - Appium
 - Maven
+- Xcode (iOS simulator)
+- AndroidStudio (avd emulatorß)
 
 ### Launch Android Emulator automatically
 

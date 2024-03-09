@@ -27,6 +27,8 @@ public class DifferentWayOfDefiningElements {
 
         driver = CreateDriverSession.initializeDriver("iOS");
         printElementText(driver);
+
+
     }
 
     public static void printElementText(AppiumDriver driver){

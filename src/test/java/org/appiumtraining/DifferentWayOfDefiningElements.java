@@ -23,10 +23,13 @@ public class DifferentWayOfDefiningElements {
 
     public static void main(String[] args) throws Exception {
         AppiumDriver driver = CreateDriverSession.initializeDriver("Android");
+        printElementText(driver);
 
-        WebElement myElement = driver.findElement(AppiumBy.accessibilityId("Accessibility"));
-        System.out.println(myElement.getText());
+        driver = CreateDriverSession.initializeDriver("iOS");
+        printElementText(driver);
+    }
 
+    public static void printElementText(AppiumDriver driver){
         DifferentWayOfDefiningElements differentWayOfDefiningElements = new DifferentWayOfDefiningElements(driver);
         System.out.println(myElement3.getText());
     }

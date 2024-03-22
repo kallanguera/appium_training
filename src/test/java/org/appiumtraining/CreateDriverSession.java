@@ -28,14 +28,20 @@ public class CreateDriverSession {
                         + File.separator + "resources"
                         + File.separator + "ApiDemos-debug.apk";
 
+
                 caps.setCapability("deviceName", "Pixel6Pro");
-                caps.setCapability("automationName", "UiAutomator2");
+                caps.setCapability("automationName", "uiautomator2");
                 caps.setCapability("platformName", platformName);
-                caps.setCapability("app",appUrl);
+                //caps.setCapability("app",appUrl);
                 caps.setCapability("avd","Pixel6Pro");
                 //caps.setCapability("avdLaunchTimeout", Duration.ofMinutes(3));
-                caps.setCapability("appPackage", "io.appium.android.apis"); //used to wait for a package to be launched
+
+                //caps.setCapability("appPackage", "io.appium.android.apis"); //used to wait for a package to be launched
                 //caps.setCapability("appActivity", "io.appium.android.apis.accessibility.CustomViewAccessibilityActivity");
+
+                caps.setCapability("appPackage","com.google.android.apps.maps");
+                caps.setCapability("appActivity","com.google.android.maps.MapsActivity");
+
                 return new AndroidDriver(url, caps);
 
             case "ios":

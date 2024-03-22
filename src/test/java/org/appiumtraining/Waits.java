@@ -11,7 +11,7 @@ public class Waits {
         AppiumDriver driver = CreateDriverSession.initializeDriver("iOS");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        By alertViews = AppiumBy.accessibilityId("Alert Views1");
+        By alertViews = AppiumBy.accessibilityId("Alert Views");
         By okayCancel = AppiumBy.accessibilityId("Okay / Cancel");
 
         driver.findElement(alertViews).click();

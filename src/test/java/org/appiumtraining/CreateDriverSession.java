@@ -18,7 +18,7 @@ public class CreateDriverSession {
         caps.setCapability(CapabilityType.PLATFORM_NAME, platformName);
         caps.setCapability("newCommandTimeout",300);
 
-        URL url = new URI("http://0.0.0.0:4723").toURL();
+        URL url = new URI("http://127.0.0.1:4723").toURL();
         String appUrl = "";
         switch(platformName.toLowerCase()) {
             case "android":
@@ -52,10 +52,11 @@ public class CreateDriverSession {
                         + File.separator + "UIKitCatalog-iphonesimulator.app";
 
                 caps.setCapability("platformName", platformName);
-                caps.setCapability("deviceName", "iPhone 14 Pro");
+                caps.setCapability("deviceName", "iPhone SE (3rd generation)");
                 caps.setCapability("automationName", "XCUITest");
-                //caps.setCapability("simulatorStartupTimeout", "180000"); //to initialize a simulator
+                caps.setCapability("simulatorStartupTimeout", "180000"); //to initialize a simulator
                 caps.setCapability("app", appUrl);
+                //caps.setCapability("bundleId","com.apple.Maps");
                 return new IOSDriver(url, caps);
 
             default:

@@ -9,92 +9,99 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-public class AndroidGestures {
+import java.rmi.Remote;
+import java.util.HashMap;
+import java.util.Map;
+
+public class iOSGestures {
     public static void main(String[] args) throws Exception {
-        AppiumDriver driver = CreateDriverSession.initializeDriver("Android");
+        AppiumDriver driver = CreateDriverSession.initializeDriver("ios");
 
-        clickSkip(driver);
-
-        WebElement mapScrollView = driver.findElement(AppiumBy.id("com.google.android.apps.maps:id/home_bottom_sheet_container"));
-        dragAndDropGesture(driver, mapScrollView, 1130,1567, 680, 830);
-
-        pitchOpenGesture(driver);
-        pitchOpenGesture(driver);
-        Thread.sleep(2000);
-        pitchCloseGesture(driver);
-    }
-    public static void longClickGesture(AppiumDriver driver){
-        By views = AppiumBy.accessibilityId("Views");
-        By dragAndDrop = AppiumBy.accessibilityId("Drag and Drop");
-        By dragDot = AppiumBy.id("io.appium.android.apis:id/drag_dot_1");
-
-        driver.findElement(views).click();
-        driver.findElement(dragAndDrop).click();
-
-        driver.executeScript("mobile: longClickGesture", ImmutableMap.of(
-                "x", 217,
-                "y", 659,
-                "duration", 1000
-        ));
-
+        tap(driver, "Picker View");
+        pickerWheel(driver);
     }
 
-    public static void clickGesture(AppiumDriver driver){
-        WebElement element = driver.findElement(AppiumBy.accessibilityId("Views"));
+    public static void swipeGesture(AppiumDriver driver){
+        WebElement element = driver.findElement(AppiumBy.
+                iOSNsPredicateString("type == \"XCUIElementTypeTable\""));
+        Map<String, Object> params = new HashMap<>();
 
-        driver.executeScript("mobile: clickGesture", ImmutableMap.of(
-                "elementId",((RemoteWebElement) element).getId()
-        ));
+        params.put("direction","up");
+        params.put("elementId",((RemoteWebElement) element).getId());
+        driver.executeScript("mobile: swipe", params);
     }
 
-    public static void dragAndDropGesture(AppiumDriver driver){
-        driver.findElement(AppiumBy.accessibilityId("Views")).click();
-        driver.findElement(AppiumBy.accessibilityId("Drag and Drop")).click();
-        WebElement element = driver.findElement(AppiumBy.id("io.appium.android.apis:id/drag_dot_1"));
+    public static void scrollGesture(AppiumDriver driver){
+        Map<String, Object> params = new HashMap<>();
+        params.put("direction", "down");
+        driver.executeScript("mobile: scroll", params);
 
-        driver.executeScript("mobile: dragGesture", ImmutableMap.of(
-                "elementId", ((RemoteWebElement) element).getId(),
-                "endX", 840,
-                "endY", 1350
-        ));
+        WebElement lastElement = driver.findElement(AppiumBy.
+                accessibilityId("Activity Indicators"));
+        params = new HashMap<>();
+
+//        params.put("direction", "down");
+        params.put("elementId", ((RemoteWebElement) lastElement).getId());
+//        params.put("predicateString","label == \"Web View\"");
+        params.put("toVisible", true);
+        driver.executeScript("mobile: scroll", params);
     }
 
-    public static void dragAndDropGesture(AppiumDriver driver, WebElement element, int startX, int startY, int endX, int endY) throws InterruptedException {
-        Thread.sleep(1000);
-        driver.executeScript("mobile: dragGesture", ImmutableMap.of(
-                "elementId", ((RemoteWebElement) element).getId(),
-                "startX", startX,
-                "startY", startY,
-                "endX", endX,
-                "endY", endY
-        ));
+    //this method was created to use with Maps,
+    // so you must to make sure on CreateDriverSession.java
+    // that is set correctly params "bundleId":"com.apple.Maps"
+    public static void pinchGesture(AppiumDriver driver) {
+        driver.findElement(AppiumBy.accessibilityId("Fechar")).click();
+
+        Map<String, Object> params1 = new HashMap<>();
+        params1.put("scale", 20);
+        params1.put("velocity", 2.2);
+        driver.executeScript("mobile: pinch", params1);
+
+        WebElement element = driver.findElement(AppiumBy.
+                iOSClassChain("**/XCUIElementTypeOther[`name == \"ControlContainerViewController.OverlayView\"`][1]"));
+
+        Map<String, Object> params2 = new HashMap<>();
+        params2.put("elementId", ((RemoteWebElement) element).getId());
+        params2.put("scale", 0.1);
+        params2.put("velocity", -2.2);
+        driver.executeScript("mobile: pinch", params2);
     }
 
-    public static void pitchOpenGesture(AppiumDriver driver) throws InterruptedException {
-        Thread.sleep(1000);
-        driver.executeScript("mobile: pinchOpenGesture", ImmutableMap.of(
-                "left", 300,
-                "top", 1000,
-                "width", 400,
-                "height", 400,
-                "percent", 0.8
-        ));
+    public static void touchAndHold(AppiumDriver driver){
+        driver.findElement(AppiumBy.accessibilityId("Steppers")).click();
+
+        WebElement element = driver.findElement(AppiumBy
+                .iOSClassChain("**/XCUIElementTypeButton[`label == \"Increment\"`][1]"));
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("elementId", ((RemoteWebElement) element).getId());
+        params.put("duration", 5);
+        driver.executeScript("mobile: touchAndHold", params);
     }
 
-    public static void clickSkip(AppiumDriver driver) throws InterruptedException {
-        Thread.sleep(3000);
-        driver.findElement(AppiumBy.xpath("//android.widget.Button[@text=\"SKIP\"]")).click();
-        Thread.sleep(5000);
+    public static void tap(AppiumDriver driver, String accessibilityId){
+        WebElement element = driver.findElement(AppiumBy.accessibilityId(accessibilityId));
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("elementId", ((RemoteWebElement)element).getId());
+        params.put("x", 0);
+        params.put("y", 0);
+        driver.executeScript("mobile: tap", params);
+
     }
 
-    public static void pitchCloseGesture(AppiumDriver driver) throws InterruptedException {
-        Thread.sleep(1000);
-        driver.executeScript("mobile: pinchCloseGesture", ImmutableMap.of(
-                "left", 200,
-                "top", 470,
-                "width", 600,
-                "height", 600,
-                "percent", 0.9
-        ));
+    private static void pickerWheel(AppiumDriver driver) {
+
+        WebElement redPickerWheel = driver.findElement(AppiumBy
+                .iOSNsPredicateString("label == \"Red color component value\""));
+        Map<String, Object> params = new HashMap<>();
+        params.put("order", "next");
+        params.put("offset", 0.15);
+        params.put("element", ((RemoteWebElement) redPickerWheel).getId());
+        driver.executeScript("mobile: selectPickerWheelValue", params);
     }
+
+
+
 }

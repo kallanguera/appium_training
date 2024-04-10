@@ -2,23 +2,24 @@ package org.appiumtraining;
 
 //https://github.com/appium/appium-uiautomator2-driver/blob/master/docs/android-mobile-gestures.md
 
-import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import java.rmi.Remote;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class iOSGestures {
     public static void main(String[] args) throws Exception {
         AppiumDriver driver = CreateDriverSession.initializeDriver("ios");
 
-        tap(driver, "Picker View");
-        pickerWheel(driver);
+        slider(driver, "0.7", "Default");
+        slider(driver, "0.3", "Custom");
+        slider(driver, "0.85", "Min and Max Images");
+        slider(driver, "0.19", "Tinted");
     }
 
     public static void swipeGesture(AppiumDriver driver){
@@ -91,17 +92,44 @@ public class iOSGestures {
 
     }
 
-    private static void pickerWheel(AppiumDriver driver) {
+    private static void pickerWheel(AppiumDriver driver, String color, String order, Integer value) {
+        driver.findElement(AppiumBy.accessibilityId("Picker View")).click();
 
-        WebElement redPickerWheel = driver.findElement(AppiumBy
-                .iOSNsPredicateString("label == \"Red color component value\""));
-        Map<String, Object> params = new HashMap<>();
-        params.put("order", "next");
-        params.put("offset", 0.15);
-        params.put("element", ((RemoteWebElement) redPickerWheel).getId());
-        driver.executeScript("mobile: selectPickerWheelValue", params);
+        boolean flag = false;
+        while(!flag){
+            WebElement redPickerWheel = driver.findElement(AppiumBy
+                    .iOSNsPredicateString("label == \""+ StringUtils.capitalize(color) +" color component value\""));
+            Map<String, Object> params = new HashMap<>();
+            params.put("order", order.toLowerCase());
+            params.put("offset", 0.15);
+            params.put("element", ((RemoteWebElement) redPickerWheel).getId());
+            driver.executeScript("mobile: selectPickerWheelValue", params);
+            if(redPickerWheel.getText().equals(value.toString())){
+                flag = true;
+            };
+        }
     }
 
+    private static void slider(AppiumDriver driver, String percentage, String sliderName){
+        driver.findElement(AppiumBy.accessibilityId("Sliders")).click();
+        List<WebElement> elements = driver.findElements(AppiumBy.xpath("//XCUIElementTypeSlider"));
+        switch (sliderName.toLowerCase()){
+            case "default":
+                elements.getFirst().sendKeys(percentage);
+                break;
+            case "tinted":
+                elements.get(1).sendKeys(percentage);
+                break;
+            case "custom":
+                elements.get(2).sendKeys(percentage);
+                break;
+            case "min and max images":
+                elements.get(3).sendKeys(percentage);
+                break;
 
+            default:
+                throw new IllegalStateException("Unexpected value: " + sliderName);
+        }
 
+    }
 }

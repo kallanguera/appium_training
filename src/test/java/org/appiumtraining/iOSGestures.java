@@ -48,9 +48,14 @@ public class iOSGestures {
         driver.executeScript("mobile: scroll", params);
     }
 
-    //this method was created to use with Maps,
-    // so you must to make sure on CreateDriverSession.java
-    // that is set correctly params "bundleId":"com.apple.Maps"
+    /**
+     * This method was created to use with Maps,
+     * so you have to make sure on CreateDriverSession.java
+     * that is set correctly params "bundleId":"com.apple.Maps"
+     * to initialize the correct app
+     *
+     * @param driver AppiumDriver
+     */
     public static void pinchGesture(AppiumDriver driver) {
         driver.findElement(AppiumBy.accessibilityId("Fechar")).click();
 
@@ -110,6 +115,15 @@ public class iOSGestures {
         }
     }
 
+
+    /**
+     * Slider method, is necessary set the percentage and the name of slider,
+     * you can adapt it removing the switch logic using a proper locator.
+     *
+     * @param driver     AppiumDriver
+     * @param percentage string with format "0.0" to select a percentage
+     * @param sliderName valid slider names are: default, tinted, custom, images
+     */
     private static void slider(AppiumDriver driver, String percentage, String sliderName){
         driver.findElement(AppiumBy.accessibilityId("Sliders")).click();
         List<WebElement> elements = driver.findElements(AppiumBy.xpath("//XCUIElementTypeSlider"));
@@ -123,7 +137,7 @@ public class iOSGestures {
             case "custom":
                 elements.get(2).sendKeys(percentage);
                 break;
-            case "min and max images":
+            case "images":
                 elements.get(3).sendKeys(percentage);
                 break;
 

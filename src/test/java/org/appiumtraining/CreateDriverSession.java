@@ -39,8 +39,15 @@ public class CreateDriverSession {
                 //caps.setCapability("appPackage", "io.appium.android.apis"); //used to wait for a package to be launched
                 //caps.setCapability("appActivity", "io.appium.android.apis.accessibility.CustomViewAccessibilityActivity");
 
+                /*Use these capabilities to open Maps*/
                 caps.setCapability("appPackage","com.google.android.apps.maps");
                 caps.setCapability("appActivity","com.google.android.maps.MapsActivity");
+
+                /**
+                 Use this capability to download ChromeDriver automatically
+                 Using the command "appium --allow-insecure chromedriver_autodownload"
+                 */
+                caps.setCapability("browserName","Chrome");
 
                 return new AndroidDriver(url, caps);
 
@@ -52,11 +59,16 @@ public class CreateDriverSession {
                         + File.separator + "UIKitCatalog-iphonesimulator.app";
 
                 caps.setCapability("platformName", platformName);
-                caps.setCapability("deviceName", "iPhone SE (3rd generation)");
+                caps.setCapability("deviceName", "iPhone 14 Pro");
                 caps.setCapability("automationName", "XCUITest");
                 caps.setCapability("simulatorStartupTimeout", "180000"); //to initialize a simulator
                 caps.setCapability("app", appUrl);
                 //caps.setCapability("bundleId","com.apple.Maps");
+
+                //caps.setCapability("bundleId", "com.example.apple-samplecode.UICatalog");
+                caps.setCapability("includeSafariInWebViews", true);
+                caps.setCapability("webviewConnectTimeout","90000");
+
                 return new IOSDriver(url, caps);
 
             default:
